@@ -31,6 +31,13 @@ router.get(
   httpServicio.getPorNombre
 );
 
+router.get('/tipo-servicio/:idTipoServicio',
+  [
+    check("idTipoServicio", "Ingrese una ID Tipo-Servicio válida").isMongoId(),
+    validarCampos,
+  ],
+  httpServicio.getServiciosByTipoServicio);
+
 // Registrar un nuevo servicio
 router.post(
   "/registro",

@@ -34,6 +34,24 @@ const httpServicio = {
     }
   },
 
+  getServiciosByTipoServicio: async (req, res) => {
+    try {
+      const { idTipoServicio } = req.params;
+
+      const servicios = await Servicio.find({ idTipoServicio }).populate('idTipoServicio');
+
+      if (!servicios || servicios.length === 0) {
+        return res.status(404).json({
+          message: "No se encontraron servicios para este tipo de servicio."
+        });
+      }
+
+      return res.status(200).json(servicios);
+    } catch (error) {
+      res.status(500).json({ error });
+    }
+  },
+
   // Registrar un nuevo servicio
   registro: async (req, res) => {
     try {
