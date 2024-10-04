@@ -16,7 +16,8 @@ const httpServicio = {
     try {
       const { id } = req.params;
       const servicio = await Servicio.findById(id);
-      if (!servicio) return res.status(404).json({ message: "Servicio no encontrado" });
+      if (!servicio)
+        return res.status(404).json({ message: "Servicio no encontrado" });
       res.json(servicio);
     } catch (error) {
       res.status(400).json({ error });
@@ -38,11 +39,13 @@ const httpServicio = {
     try {
       const { idTipoServicio } = req.params;
 
-      const servicios = await Servicio.find({ idTipoServicio }).populate('idTipoServicio');
+      const servicios = await Servicio.find({ idTipoServicio }).populate(
+        "idTipoServicio"
+      );
 
       if (!servicios || servicios.length === 0) {
         return res.status(404).json({
-          message: "No se encontraron servicios para este tipo de servicio."
+          message: "No se encontraron servicios para este tipo de servicio.",
         });
       }
 
@@ -55,12 +58,22 @@ const httpServicio = {
   // Registrar un nuevo servicio
   registro: async (req, res) => {
     try {
-      const { nombre_serv, descripcion, galeria, beneficios, idTipoServicio } = req.body;
+      const {
+        nombre_serv,
+        descripcion,
+        galeria,
+        precio,
+        duracion,
+        beneficios,
+        idTipoServicio,
+      } = req.body;
 
       const servicio = new Servicio({
         nombre_serv,
         descripcion,
         galeria,
+        precio,
+        duracion,
         beneficios,
         idTipoServicio,
       });
@@ -77,15 +90,32 @@ const httpServicio = {
   editar: async (req, res) => {
     try {
       const { id } = req.params;
-      const { nombre_serv, descripcion, galeria, beneficios, idTipoServicio } = req.body;
+      const {
+        nombre_serv,
+        descripcion,
+        galeria,
+        precio,
+        duracion,
+        beneficios,
+        idTipoServicio,
+      } = req.body;
 
       const servicio = await Servicio.findByIdAndUpdate(
         id,
-        { nombre_serv, descripcion, galeria, beneficios, idTipoServicio },
+        {
+          nombre_serv,
+          descripcion,
+          galeria,
+          precio,
+          duracion,
+          beneficios,
+          idTipoServicio,
+        },
         { new: true }
       );
 
-      if (!servicio) return res.status(404).json({ message: "Servicio no encontrado" });
+      if (!servicio)
+        return res.status(404).json({ message: "Servicio no encontrado" });
 
       res.json(servicio);
     } catch (error) {
@@ -102,7 +132,8 @@ const httpServicio = {
         { estado: true },
         { new: true }
       );
-      if (!servicio) return res.status(404).json({ message: "Servicio no encontrado" });
+      if (!servicio)
+        return res.status(404).json({ message: "Servicio no encontrado" });
       res.json(servicio);
     } catch (error) {
       res.status(500).json({ error });
@@ -118,7 +149,8 @@ const httpServicio = {
         { estado: false },
         { new: true }
       );
-      if (!servicio) return res.status(404).json({ message: "Servicio no encontrado" });
+      if (!servicio)
+        return res.status(404).json({ message: "Servicio no encontrado" });
       res.json(servicio);
     } catch (error) {
       res.status(500).json({ error });

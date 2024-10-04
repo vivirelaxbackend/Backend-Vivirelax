@@ -4,6 +4,8 @@ const servicioSchema = new mongoose.Schema({
   nombre_serv: { type: String, required: true },
   descripcion: { type: String, required: true },
   galeria: [{ url: { type: String }, publicId: { type: String } }],
+  precio: { type: Number, required: true },
+  duracion: { type: String, required: true },
   beneficios: [{ descrip: { type: String, _id: false } }],
   idTipoServicio: { type: mongoose.Schema.Types.ObjectId, ref: "TipoServicio", required: true },
   estado: { type: Boolean, default: 1 },
