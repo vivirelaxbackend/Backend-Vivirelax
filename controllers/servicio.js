@@ -4,7 +4,7 @@ const httpServicio = {
   // Obtener todos los servicios
   getAll: async (req, res) => {
     try {
-      const servicios = await Servicio.find();
+      const servicios = await Servicio.find().populate("idTipoServicio");
       res.json(servicios);
     } catch (error) {
       res.status(500).json({ error });
@@ -15,7 +15,7 @@ const httpServicio = {
   getPorId: async (req, res) => {
     try {
       const { id } = req.params;
-      const servicio = await Servicio.findById(id);
+      const servicio = await Servicio.findById(id).populate("idTipoServicio");
       if (!servicio)
         return res.status(404).json({ message: "Servicio no encontrado" });
       res.json(servicio);
@@ -28,7 +28,9 @@ const httpServicio = {
   getPorNombre: async (req, res) => {
     try {
       const { nombre } = req.params;
-      const servicios = await Servicio.find({ nombre_serv: nombre });
+      const servicios = await Servicio.find({ nombre_serv: nombre }).populate(
+        "idTipoServicio"
+      );
       res.json(servicios);
     } catch (error) {
       res.status(500).json({ error });
@@ -112,7 +114,7 @@ const httpServicio = {
           idTipoServicio,
         },
         { new: true }
-      );
+      ).populate("idTipoServicio");
 
       if (!servicio)
         return res.status(404).json({ message: "Servicio no encontrado" });
