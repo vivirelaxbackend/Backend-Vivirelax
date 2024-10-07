@@ -11,6 +11,11 @@ router.get(
   httpReserva.getAll
 );
 
+router.get(
+  "/contacto",
+  httpReserva.contactanos
+);
+
 // Obtener una reserva por ID
 router.get(
   "/:id",
@@ -25,7 +30,7 @@ router.get(
 router.post(
   "/registro",
   [
-    check("nombre_res", "Digite el nombre de la reserva").not().isEmpty(),
+    check("nombre_res", "Digite el nombre").not().isEmpty(),
     check("correo_res", "Digite un correo electrónico válido").isEmail(),
     check("telefono_res", "Digite un número de teléfono válido").not().isEmpty(),
     check("mensaje_res", "Digite el mensaje de la reserva").not().isEmpty(),
