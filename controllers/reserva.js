@@ -180,7 +180,7 @@ const httpReserva = {
         id,
         { estado: true },
         { new: true }
-      );
+      ).populate("idServicio");
       if (!reserva) return res.status(404).json({ message: "Reserva no encontrada" });
       res.json(reserva);
     } catch (error) {
@@ -196,7 +196,7 @@ const httpReserva = {
         id,
         { estado: false },
         { new: true }
-      );
+      ).populate("idServicio");
       if (!reserva) return res.status(404).json({ message: "Reserva no encontrada" });
       res.json(reserva);
     } catch (error) {

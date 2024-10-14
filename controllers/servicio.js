@@ -133,7 +133,7 @@ const httpServicio = {
         id,
         { estado: true },
         { new: true }
-      );
+      ) .populate("idTipoServicio");
       if (!servicio)
         return res.status(404).json({ message: "Servicio no encontrado" });
       res.json(servicio);
@@ -150,7 +150,7 @@ const httpServicio = {
         id,
         { estado: false },
         { new: true }
-      );
+      ).populate("idTipoServicio");
       if (!servicio)
         return res.status(404).json({ message: "Servicio no encontrado" });
       res.json(servicio);
