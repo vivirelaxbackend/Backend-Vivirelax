@@ -8,7 +8,7 @@ import helpersUsuario from "../helpers/usuario.js";
 
 const router = new Router();
 
-// Obtener todos los administradores
+// Obtener todos los administradores;
 router.get(
   "/all",
   validarJWT, // Protege esta ruta para que solo usuarios autenticados puedan acceder
