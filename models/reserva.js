@@ -5,6 +5,7 @@ const reservaSchema = new mongoose.Schema({
   correo_res: { type: String, required: true },
   telefono_res: { type: String, required: true },
   mensaje_res: { type: String, required: true },
+  fecha_res: { type: Date, required: true },
   idServicio: { type: mongoose.Schema.Types.ObjectId, ref: "Servicio"},
   createdAt: { type: Date, default: Date.now },
   estado: { type: Boolean, default: 1 }

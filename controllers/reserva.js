@@ -1,13 +1,13 @@
 import Reserva from "../models/reserva.js";
 import Admin from "../models/administrador.js";
-import Servicio from "../models/servicio.js"; 
+import Servicio from "../models/servicio.js";
 import nodemailer from "nodemailer";
 
 const httpReserva = {
   // Obtener todas las reservas
   getAll: async (req, res) => {
     try {
-      const reservas = await Reserva.find().populate('idServicio');
+      const reservas = await Reserva.find().populate("idServicio");
       res.json(reservas);
     } catch (error) {
       res.status(500).json({ error });
@@ -18,8 +18,9 @@ const httpReserva = {
   getPorId: async (req, res) => {
     try {
       const { id } = req.params;
-      const reserva = await Reserva.findById(id).populate('idServicio');
-      if (!reserva) return res.status(404).json({ message: "Reserva no encontrada" });
+      const reserva = await Reserva.findById(id).populate("idServicio");
+      if (!reserva)
+        return res.status(404).json({ message: "Reserva no encontrada" });
       res.json(reserva);
     } catch (error) {
       res.status(400).json({ error });
@@ -29,7 +30,14 @@ const httpReserva = {
   registro: async (req, res) => {
     try {
       // 1. Validar y obtener datos de la solicitud
-      const { nombre_res, correo_res, telefono_res, mensaje_res, idServicio } = req.body;
+      const {
+        nombre_res,
+        correo_res,
+        telefono_res,
+        mensaje_res,
+        fecha_res,
+        idServicio,
+      } = req.body;
 
       // 2. Crear una nueva reserva
       const nuevaReserva = new Reserva({
@@ -37,6 +45,7 @@ const httpReserva = {
         correo_res,
         telefono_res,
         mensaje_res,
+        fecha_res,
         idServicio,
       });
 
@@ -64,11 +73,18 @@ const httpReserva = {
         },
       });
 
+      const fechaResParsed = new Date(fecha_res + "T00:00:00"); // Forzamos el tiempo a medianoche local
+      const fechaReservaFormateada = new Intl.DateTimeFormat("es-ES", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      }).format(fechaResParsed);
+
       // 6. Enviar correos (solo al cliente y al administrador)
-      const fechaFormateada = new Intl.DateTimeFormat('es-ES', {
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric',
+      const fechaFormateada = new Intl.DateTimeFormat("es-ES", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
       }).format(new Date());
 
       // Correo del cliente
@@ -82,12 +98,13 @@ const httpReserva = {
                         ${servicio.nombre_serv}
                     </h2>
                     <p>Su reserva ha sido confirmada. Nos pondremos en contacto con usted pronto.</p>
-                    <p><strong>Detalles:</strong></p>
+                    <p style="font-size: 14px;color: #000000;font-weight: bold"><strong>Detalles:</strong></p>
                     <p>Nombre: ${nombre_res}</p>
                     <p>Correo: ${correo_res}</p>
                     <p>Teléfono: ${telefono_res}</p>
+                    <p>Fecha Reserva: ${fechaReservaFormateada}</p>
                     <p>Mensaje: ${mensaje_res}</p>
-                    <p>Fecha de creación: ${fechaFormateada}</p>
+                    <p>Enviada el ${fechaFormateada}</p>
                 </div>
             `,
       };
@@ -102,12 +119,13 @@ const httpReserva = {
                     <h2 style="color: #E53935;">
                         Nueva reserva confirmada para el servicio: ${servicio.nombre_serv}
                     </h2>
-                    <p>Detalles de la reserva:</p>
+                    <p style="font-size: 14px;color: #000000;font-weight: bold">Detalles de la reserva:</p>
                     <p>Nombre Cliente: ${nombre_res}</p>
                     <p>Correo Cliente: ${correo_res}</p>
-                    <p>Teléfono Cliente: ${telefono_res}</p>
+                    <p>Teléfono Cliente: <a href="https://wa.me/57${telefono_res}">${telefono_res}</a></p>
+                    <p>Fecha Reserva: ${fechaReservaFormateada}</p>
                     <p>Mensaje del Cliente: ${mensaje_res}</p>
-                    <p>Fecha de creación: ${fechaFormateada}</p>
+                    <p>Enviada el ${fechaFormateada}</p>
                 </div>
             `,
       };
@@ -130,15 +148,30 @@ const httpReserva = {
   editar: async (req, res) => {
     try {
       const { id } = req.params;
-      const { nombre_res, correo_res, telefono_res, mensaje_res, idServicio } = req.body;
+      const {
+        nombre_res,
+        correo_res,
+        telefono_res,
+        mensaje_res,
+        fecha_res,
+        idServicio,
+      } = req.body;
 
       const reserva = await Reserva.findByIdAndUpdate(
         id,
-        { nombre_res, correo_res, telefono_res, mensaje_res, idServicio },
+        {
+          nombre_res,
+          correo_res,
+          telefono_res,
+          fecha_res,
+          mensaje_res,
+          idServicio,
+        },
         { new: true }
       );
 
-      if (!reserva) return res.status(404).json({ message: "Reserva no encontrada" });
+      if (!reserva)
+        return res.status(404).json({ message: "Reserva no encontrada" });
 
       res.json(reserva);
     } catch (error) {
@@ -181,7 +214,8 @@ const httpReserva = {
         { estado: true },
         { new: true }
       ).populate("idServicio");
-      if (!reserva) return res.status(404).json({ message: "Reserva no encontrada" });
+      if (!reserva)
+        return res.status(404).json({ message: "Reserva no encontrada" });
       res.json(reserva);
     } catch (error) {
       res.status(500).json({ error });
@@ -197,7 +231,8 @@ const httpReserva = {
         { estado: false },
         { new: true }
       ).populate("idServicio");
-      if (!reserva) return res.status(404).json({ message: "Reserva no encontrada" });
+      if (!reserva)
+        return res.status(404).json({ message: "Reserva no encontrada" });
       res.json(reserva);
     } catch (error) {
       res.status(500).json({ error });
