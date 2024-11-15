@@ -97,7 +97,7 @@ const httpReserva = {
                     <h2 style="color: #E53935;">
                         ${servicio.nombre_serv}
                     </h2>
-                    <p>Su reserva ha sido confirmada. Nos pondremos en contacto con usted pronto.</p>
+                    <p>Su reserva ha sido enviada. Nos pondremos en contacto contigo.</p>
                     <p style="font-size: 14px;color: #000000;font-weight: bold"><strong>Detalles:</strong></p>
                     <p>Nombre: ${nombre_res}</p>
                     <p>Correo: ${correo_res}</p>
